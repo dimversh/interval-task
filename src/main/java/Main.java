@@ -6,36 +6,9 @@ public class Main {
         String[] texts = new String[25];
         List<Thread> threads = new ArrayList<>();
 
-        //Логика обработки строки
-        Runnable logic = () -> {
-            for (String text : texts) {
-                int maxSize = 0;
-                for (int i = 0; i < text.length(); i++) {
-                    for (int j = 0; j < text.length(); j++) {
-
-                        if (i >= j) {
-                            continue;
-                        }
-
-                        boolean bFound = false;
-                        for (int k = i; k < j; k++) {
-                            if (text.charAt(k) == 'b') {
-                                bFound = true;
-                                break;
-                            }
-                        }
-                        if (!bFound && maxSize < j - i) {
-                            maxSize = j - i;
-                        }
-                    }
-                }
-                System.out.println(text.substring(0, 100) + " -> " + maxSize);
-            }
-        };
-
+        //Заполнение списка строк
         for (int i = 0; i < texts.length; i++) {
             texts[i] = generateText("aab", 30_000);
-            threads.add(new Thread(logic));
         }
 
         long startTs = System.currentTimeMillis(); // start time
@@ -44,13 +17,14 @@ public class Main {
             Thread thread = new Thread(
                     () -> {
                         int maxSize = 0;
+
                         for (int i = 0; i < text.length(); i++) {
-                            //0
                             for (int j = 0; j < text.length(); j++) {
-                                //2
+
                                 if (i >= j) {
                                     continue;
                                 }
+
                                 boolean bFound = false;
                                 for (int k = i; k < j; k++) {
                                     if (text.charAt(k) == 'b') {
